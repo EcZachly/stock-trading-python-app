@@ -26,27 +26,19 @@ def run_stock_job():
         for ticker in data['results']:
             tickers.append(ticker)
 
-    example_ticker =  {'ticker': 'ZWS', 
-        'name': 'Zurn Elkay Water Solutions Corporation', 
-        'market': 'stocks', 
-        'locale': 'us', 
-        'primary_exchange': 'XNYS', 
-        'type': 'CS', 
-        'active': True, 
-        'currency_name': 'usd', 
-        'cik': '0001439288', 
-        'composite_figi': 'BBG000H8R0N8', 	'share_class_figi': 'BBG001T36GB5', 	'last_updated_utc': '2025-09-11T06:11:10.586204443Z'}
-
-    # Write tickers to CSV with example_ticker schema
-    fieldnames = list(example_ticker.keys())
-    output_csv = 'tickers.csv'
-    with open(output_csv, mode='w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for t in tickers:
-            row = {key: t.get(key, '') for key in fieldnames}
-            writer.writerow(row)
-    print(f'Wrote {len(tickers)} rows to {output_csv}')
+    # Write tickers to CSV
+    if tickers:  # Check if tickers list is not empty
+        fieldnames = list(tickers[0].keys())
+        output_csv = 'tickers.csv'
+        with open(output_csv, mode='w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for t in tickers:
+                row = {key: t.get(key, '') for key in fieldnames}
+                writer.writerow(row)
+        print(f'Wrote {len(tickers)} rows to {output_csv}')
+    else:
+        print("No tickers retrieved to write to CSV.")
 
 if __name__ == '__main__':
     run_stock_job()
